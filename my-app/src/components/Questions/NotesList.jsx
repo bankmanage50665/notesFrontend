@@ -41,7 +41,7 @@ export default function NotesList() {
 
                                                 <div className="mt-4 text-sm text-gray-800">
                                                     <p>Category: {item.category}</p>
-                                                    {item.year && <p>Year: {item.year}</p>}
+                                                    {item.year && <p>Professional: {item.year}</p>}
                                                     {item.subject && <p>Subject: {item.subject}</p>}
                                                 </div>
                                             </Link>

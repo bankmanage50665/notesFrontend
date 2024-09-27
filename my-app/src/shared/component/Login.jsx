@@ -66,6 +66,13 @@ export async function action({ request, params }) {
       },
     });
     const resData = await res.json();
+    const token = resData.token
+    localStorage.setItem("token", token)
+    localStorage.setItem("email", resData.email)
+    localStorage.setItem("userid", resData.userId)
+
+   
+
 
     if (!res.ok) {
       throw new Error(resData.message || "Field to loging user.");
@@ -76,5 +83,5 @@ export async function action({ request, params }) {
       { status: 500 }
     );
   }
-  return redirect("/products");
+  return redirect("/notes");
 }

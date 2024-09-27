@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import "./App.css";
 import "./index.css";
 import RootLayout from "./shared/navigation/RootLayout";
@@ -20,14 +24,18 @@ import NotesDetails, {
   loader as notesDetailLoader,
 } from "./components/Questions/NotesDetails.jsx";
 import EditNotes from "./components/Questions/EditNotes.jsx";
+import { tokenLoader } from "./utils/getToken.js";
+import { logoutAction } from "./utils/logout.js";
 
 const router = createBrowserRouter([
   {
     path: "",
     element: <RootLayout />,
-    errorElement: <ErrorHandler />,
+    // errorElement: <ErrorHandler />,
+    loader: tokenLoader,
+    id: "root",
     children: [
-      { index: true, element: <h1>Notes list </h1> },
+      { index: true, element: <Navigate to="notes" /> },
       { path: "add", element: <AddNotes /> },
 
       { path: "signup", element: <SignupForm />, action: signupAction },
@@ -62,6 +70,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+      { path: "logout", action: logoutAction },
     ],
   },
 ]);

@@ -1,6 +1,7 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Form, NavLink, useRouteLoaderData } from "react-router-dom";
 function MainNavigation() {
+  const token = useRouteLoaderData("root")
 
   return (
 
@@ -21,7 +22,7 @@ function MainNavigation() {
               Notes
             </NavLink>
           </li>
-          <li>
+          {!token && <li>
             <NavLink
               to="signup"
               className={({ isActive }) =>
@@ -32,8 +33,8 @@ function MainNavigation() {
             >
               Signup
             </NavLink>
-          </li>
-          <li>
+          </li>}
+          {!token && <li>
             <NavLink
               to="login"
               className={({ isActive }) =>
@@ -44,8 +45,8 @@ function MainNavigation() {
             >
               Login
             </NavLink>
-          </li>
-          <li>
+          </li>}
+          {token && <li>
             <NavLink
               to="add"
               className={({ isActive }) =>
@@ -56,7 +57,13 @@ function MainNavigation() {
             >
               Add notes
             </NavLink>
-          </li>
+          </li>}
+
+          {token && <li>
+            <Form method="post" action="logout">
+              <button>Logout </button>
+            </Form>
+          </li>}
 
         </ul>
       </div>
