@@ -24,7 +24,7 @@ function AdminPage() {
 
     
 
-    const response = await fetch(`http://localhost/questions/add`, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/questions/add`, {
       method: 'POST',
       body: JSON.stringify(questionData),
       headers: {

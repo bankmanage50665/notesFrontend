@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Form, json } from 'react-router-dom';
+import { useNavigate, Form, json, useRouteLoaderData } from 'react-router-dom';
 import "./style.css"
 
 
@@ -8,6 +8,7 @@ function AddNotes() {
 
     const [image, setImage] = useState(null);
     const [isSubmiting, setIsSubmiting] = useState(false)
+    const token = useRouteLoaderData("root")
 
     const navigate = useNavigate()
 
@@ -63,11 +64,12 @@ function AddNotes() {
         try {
             setIsSubmiting(true)
 
-            const response = await fetch(`http://localhost/notes/add`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/notes/add`, {
                 method: 'POST',
                 body: JSON.stringify(notesData),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             })
             const resData = await response.json()

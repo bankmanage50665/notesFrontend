@@ -50,7 +50,7 @@ function LoginForm() {
 
 export default LoginForm;
 
-export async function action({ request, params }) {
+export async function loginAction({ request, params }) {
   const formData = await request.formData();
   const userData = {
     email: formData.get("email"),
@@ -58,7 +58,7 @@ export async function action({ request, params }) {
   };
 
   try {
-    const res = await fetch("http://localhost/users/login", {
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/login`, {
       method: "POST",
       body: JSON.stringify(userData),
       headers: {
@@ -66,6 +66,7 @@ export async function action({ request, params }) {
       },
     });
     const resData = await res.json();
+    console.log(resData)
     const token = resData.token
     localStorage.setItem("token", token)
     localStorage.setItem("email", resData.email)

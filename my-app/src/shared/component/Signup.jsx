@@ -73,7 +73,7 @@ function SignupForm() {
 
 export default SignupForm;
 
-export async function action({ request, params }) {
+export async function signupAction({ request, params }) {
   const formData = await request.formData();
   const userData = {
     name: formData.get("name"),
@@ -82,7 +82,7 @@ export async function action({ request, params }) {
   };
 
   try {
-    const res = await fetch("http://localhost/users/signup", {
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/signup`, {
       method: "POST",
       body: JSON.stringify(userData),
       headers: {

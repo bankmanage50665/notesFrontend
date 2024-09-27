@@ -8,6 +8,7 @@ export default function EditNotes() {
     const note = data && data.note
     const navigate = useNavigate()
     const id = note.id
+    const token = useRouteLoaderData("root")
 
 
 
@@ -31,11 +32,13 @@ export default function EditNotes() {
         setIsSubmiting(true)
         try {
 
-            const response = await fetch(`http://localhost/notes/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/notes/${id}`, {
                 method: 'PATCH',
                 body: JSON.stringify(notesData),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization:  `Bearer ${token}`
+
                 }
             })
             const resData = await response.json()

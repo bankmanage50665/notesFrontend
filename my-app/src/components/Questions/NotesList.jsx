@@ -1,6 +1,6 @@
 import "../Admin/style.css";
 
-import { json, useLoaderData, useNavigation , Link} from "react-router-dom";
+import { json, useLoaderData, useNavigation, Link } from "react-router-dom";
 export default function NotesList() {
     const data = useLoaderData();
     const notes = data.notes;
@@ -58,14 +58,14 @@ export default function NotesList() {
 
 export async function loader() {
     try {
-        const response = await fetch("http://localhost/notes/allNotes");
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/notes/allNotes`);
         const resData = await response.json();
 
         if (!response.ok) {
             throw new Error(resData.message);
         }
 
-        console.log(resData);
+     
         return resData;
     } catch (err) {
         throw json(

@@ -3,16 +3,12 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+import React from "react";
 import "./App.css";
 import "./index.css";
 import RootLayout from "./shared/navigation/RootLayout";
-import SignupForm, { action as signupAction } from "./shared/component/Signup";
-import LoginForm, { action as loginAction } from "./shared/component/Login";
-
 import ErrorHandler from "./shared/component/Error";
 
-//Notes  app
-import AddNotes from "./components/Admin/AddNotes";
 import NotesList, {
   loader as notesLoader,
 } from "./components/Questions/NotesList";
@@ -26,20 +22,50 @@ import NotesDetails, {
 import EditNotes from "./components/Questions/EditNotes.jsx";
 import { tokenLoader } from "./utils/getToken.js";
 import { logoutAction } from "./utils/logout.js";
+import { signupAction } from "./shared/component/Signup.jsx";
+import { loginAction } from "./shared/component/Login.jsx";
+import { Suspense } from "react";
+
+const AddNotes = React.lazy(() => import("./components/Admin/AddNotes"));
+const SignupForm = React.lazy(() => import("./shared/component/Signup"));
+const LoginForm = React.lazy(() => import("./shared/component/Login"));
 
 const router = createBrowserRouter([
   {
     path: "",
     element: <RootLayout />,
-    // errorElement: <ErrorHandler />,
+    errorElement: <ErrorHandler />,
     loader: tokenLoader,
     id: "root",
     children: [
       { index: true, element: <Navigate to="notes" /> },
-      { path: "add", element: <AddNotes /> },
+      {
+        path: "add",
+        element: (
+          <Suspense fallback={<p>Loading</p>}>
+            <AddNotes />
+          </Suspense>
+        ),
+      },
 
-      { path: "signup", element: <SignupForm />, action: signupAction },
-      { path: "login", element: <LoginForm />, action: loginAction },
+      {
+        path: "signup",
+        element: (
+          <Suspense fallback={<p>Loading</p>}>
+            <SignupForm />
+          </Suspense>
+        ),
+        action: signupAction,
+      },
+      {
+        path: "login",
+        element: (
+          <Suspense fallback={<p>Loading</p>}>
+            <LoginForm />
+          </Suspense>
+        ),
+        action: loginAction,
+      },
       {
         path: "notes",
         element: <NotesLayout />,
@@ -47,7 +73,11 @@ const router = createBrowserRouter([
         id: "notes",
 
         children: [
-          { index: true, element: <NotesList />, loader: notesLoader },
+          {
+            index: true,
+            element: <NotesList />,
+            loader: notesLoader,
+          },
           {
             path: "1-professional",
             element: <FirstYear />,
