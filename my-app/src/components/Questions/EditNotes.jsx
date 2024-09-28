@@ -1,10 +1,10 @@
 import { useState } from "react"
-import { useRouteLoaderData, Form, useNavigation, json, useNavigate } from "react-router-dom"
+import { useRouteLoaderData, Form, useNavigation, json, useNavigate, useLoaderData } from "react-router-dom"
 
 export default function EditNotes() {
     const [isSubmiting, setIsSubmiting] = useState(false)
 
-    const data = useRouteLoaderData("note-id")
+    const data = useLoaderData()
     const note = data && data.note
     const navigate = useNavigate()
     const id = note.id

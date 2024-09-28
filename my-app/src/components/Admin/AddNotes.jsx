@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, Form, json, useRouteLoaderData } from 'react-router-dom';
 import "./style.css"
+import { FaUpload } from 'react-icons/fa';
+
+
+
+import ImageUpload from '../../shared/component/ImageUpload';
 
 
 function AddNotes() {
@@ -9,11 +14,17 @@ function AddNotes() {
     const [image, setImage] = useState(null);
     const [isSubmiting, setIsSubmiting] = useState(false)
     const token = useRouteLoaderData("root")
+    const [files, setFiles] = useState([]);
 
     const navigate = useNavigate()
 
 
     const [selectedYear, setSelectedYear] = useState('');
+
+    function handleGetImg(img) {
+        setFiles(img);
+    }
+
 
     const subjectsByYear = {
         '1': [
@@ -49,30 +60,42 @@ function AddNotes() {
         const formData = new FormData()
         const formElements = e.target.elements
 
-        e.preventDefault();
-        const notesData = {
 
-            title: formElements.title.value,
-            description: formElements.description.value,
-            chapter: formElements.chapter.value,
-            subject: formElements.subject.value,
-            year: formElements.year.value
-        }
+        e.preventDefault();
+        // const notesData = {
+
+        //     title: formElements.title.value,
+        //     description: formElements.description.value,
+        //     chapter: formElements.chapter.value,
+        //     subject: formElements.subject.value,
+        //     year: formElements.year.value
+        // }
 
 
 
         try {
             setIsSubmiting(true)
+            formData.append("title", formElements.title.value);
+            formData.append("description", formElements.description.value);
+            formData.append("chapter", formElements.chapter.value);
+            formData.append("subject", formElements.subject.value);
+            formData.append("year", formElements.year.value);
+            files.forEach((files) => formData.append("image", files));
+
+
+
 
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/notes/add`, {
                 method: 'POST',
-                body: JSON.stringify(notesData),
+                body: formData,
                 headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
+
+                    Authorization: "Bearer " + token,
+                },
             })
             const resData = await response.json()
+
+            console.log(resData)
 
             if (!response.ok) {
                 throw json({ message: resData.message })
@@ -164,6 +187,17 @@ function AddNotes() {
                                 </option>
                             ))}
                         </select>
+                    </div>
+
+                    <div className="relative">
+                        <label
+                            htmlFor="imageUpload"
+                            className="block mb-2 text-lg font-semibold text-gray-800"
+                        >
+                            <FaUpload className="inline mr-2 text-indigo-500" />
+                            Upload Images
+                        </label>
+                        <ImageUpload onChangeImages={handleGetImg} />
                     </div>
 
                     <button

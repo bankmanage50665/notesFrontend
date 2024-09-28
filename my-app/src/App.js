@@ -88,14 +88,18 @@ const router = createBrowserRouter([
           { path: "final-year", element: <FinalYear /> },
           {
             path: ":id",
-            loader: notesDetailLoader,
-            id: "note-id",
+
             children: [
               {
                 index: true,
                 element: <NotesDetails />,
+                loader: notesDetailLoader
               },
-              { path: "edit", element: <EditNotes /> },
+              {
+                path: "edit",
+                element: <EditNotes />,
+                loader: notesDetailLoader,
+              },
             ],
           },
         ],

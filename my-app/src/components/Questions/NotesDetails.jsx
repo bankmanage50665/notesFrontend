@@ -1,13 +1,15 @@
 import { useState } from "react"
-import { json, useNavigate, Link, useRouteLoaderData, useLocation } from "react-router-dom"
+import { json, useNavigate, Link, useRouteLoaderData, useLocation, useLoaderData } from "react-router-dom"
 
 export default function NotesList() {
     const [isDeleting, setIsDeleting] = useState(false)
-    const data = useRouteLoaderData("note-id")
+    const data = useLoaderData()
     const token = useRouteLoaderData("root")
     const note = data.note
     const navigate = useNavigate()
     const location = useLocation()
+
+    console.log(data)
 
     const isBack = location.state && location.state.sp
     const isYear = location.state && location.state.year
@@ -99,6 +101,18 @@ export default function NotesList() {
             <p className="text-gray-600 leading-relaxed mb-6 whitespace-pre-wrap">
                 {note.description}
             </p>
+
+            <div className="grid grid-cols-1 max-w-screen-xl  mx-auto gap-4 p-4">
+                {note && note.image.length > 1 && note.image.map((img, index) => (
+                    <div key={index} className="aspect-w-16 aspect-h-9 overflow-hidden rounded-lg shadow-md">
+                        <img
+                            src={`${process.env.REACT_APP_BACKEND_URL}/${img}`}
+                            alt={`Note image ${index + 1}`}
+                            className="w-full h-full object-cover transition-transform hover:scale-105"
+                        />
+                    </div>
+                ))}
+            </div>
 
             {isDeleting && (
                 <div className="text-sm text-gray-500 italic">
